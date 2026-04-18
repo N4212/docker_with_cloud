@@ -1,0 +1,21 @@
+name: Build and push docker image #nom
+
+on:
+    push:
+        branches:
+            - main #la branche conernee dans Github
+jobs:
+    build:
+        runs-on: ubuntu-latest #le syteme dans le serveur qui va executer
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+            - name: Login to docker hub
+              uses: docker/login-action@v2
+              with:
+                username: ${{ secrets.DOCKER_USERNAME }} #les information sont stockes dans le compte Github
+                password: ${{ secrets.DOCKER_PASSWORD }} #genere a partir de token dans docker hub et stocke dans github
+            - name: Build Docker image
+              run: docker build -t haritsima/docker_with_cloud:latest . #ne pas oublier le point
+            - name: Push Docker image
+              run: docker push haritsima/docker_with_cloud #
