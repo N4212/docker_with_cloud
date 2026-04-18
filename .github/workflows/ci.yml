@@ -3,7 +3,7 @@ name: Build and push docker image #nom
 on:
     push:
         branches:
-            - main #la branche conernee dans Github
+            - master #la branche conernee dans Github
 jobs:
     build:
         runs-on: ubuntu-latest #le syteme dans le serveur qui va executer
