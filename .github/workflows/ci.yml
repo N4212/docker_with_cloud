@@ -33,5 +33,8 @@ jobs:
         - name: stop old container
           run: docker stop docker_with_cloud || true
 
+        - name: remove old container
+          run: docker rm docker_with_cloud || true
+
         - name: run new container
           run: docker run -d -p 8080:80 --name docker_with_cloud haritsima/docker_with_cloud
