@@ -10,12 +10,28 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v3
+
             - name: Login to docker hub
               uses: docker/login-action@v2
               with:
-                username: ${{ secrets.DOCKER_USERNAME }} #les information sont stockes dans le compte Github
-                password: ${{ secrets.DOCKER_PASSWORD }} #genere a partir de token dans docker hub et stocke dans github
+                username: ${{ secrets.DOCKER_USERNAME }} #les informations sont stockes dans le compte Github
+                password: ${{ secrets.DOCKER_PASSWORD }} #token generated dans docker hub et stocke dans github
+
             - name: Build Docker image
               run: docker build -t haritsima/docker_with_cloud:latest . #ne pas oublier le point
+
             - name: Push Docker image
               run: docker push haritsima/docker_with_cloud
+
+    deploy: 
+      runs-on: self-hosted
+      needs: build
+      steps:
+        - name: pull image
+          run: docker pull haritsima/docker_with_cloud:latest
+
+        - name: stop old container
+          run: docker stop docker_with_cloud || true
+
+        - name: run new container
+          run: docker run -d -p 8080:80 --name docker_with_cloud haritsima/docker_with_cloud
